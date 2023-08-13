@@ -20,17 +20,10 @@ class RbData:
 
         if api_url is None:
             raise AttributeError('Rbdata api not specified. Put in constructor or Env variable "RBDATA_API"')
-        self.api_url=api_url+"?integration=raw" #почему-то иначе не особо работает, только вот так
+        self.api_url=api_url
     def get_videos(self,name) -> list[Video]:
-        resp=requests.post(self.api_url,json={'videoName':name})
+        resp=requests.get(self.api_url,params={'videoName':name})
         if resp.status_code!=200:
             return None
-        
-        # потому что мы используем ?integration=raw
-        # приходится дополнительно вручную обрабатывать поступающие данные
-        # от этого, конечно надо как-то избавляться #TODO
-        # чтобы было вот так [Video(**data) for data in resp.json()['videos']]
 
-        body_json=resp.json()['body']
-        body_dict=json.loads(body_json)
-        return [Video(**data) for data in body_dict['videos']]
+        return [Video(**data) for data in resp.json()['videos']]
