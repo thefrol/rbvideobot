@@ -110,6 +110,7 @@ $config= Get-Content $configFile | ConvertFrom-Yaml
 if("" -eq $Environment){
     $Environment=$config.default
 }
+Write-Host "Using Profile [$Environment]"
 
 $settings=$config.profiles[$Environment]
 
@@ -125,8 +126,15 @@ foreach($parameter in $settings.GetEnumerator()){
 
 #convert evn variables to string
 $envString=''
+$firstEnv=$true
 foreach ($env in $settings.environment.GetEnumerator()){
-    $envString+=$env.Name + '=' + $env.Value + ';'
+    if($firstEnv){
+        $firstEnv=$false
+        #not added ";"
+    } else{
+        $envString+=";"
+    }
+    $envString+=$env.Name + '=' + $env.Value
 }
 $runString+=" --environment `"$envString`""
 
