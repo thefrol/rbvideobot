@@ -1,4 +1,17 @@
-from bot import bot
-url='https://functions.yandexcloud.net/d4e47fccnv612e5824e8'
+import sys
+import requests
 
-bot.set_webhook('https://functions.yandexcloud.net/d4e47fccnv612e5824e8')
+import telebot
+
+if len(sys.argv)<3:
+    print('usage python -m activate [-help] TOKEN URL')
+else:
+    token=sys.argv[1]
+    url=sys.argv[2]
+
+resp=requests.get(f'https://api.telegram.org/bot{token}/setWebhook?url={url}')
+if resp.status_code==200:
+    print("Success!!!")
+print(resp.json()['description'])
+
+#bot.set_webhook(url)
