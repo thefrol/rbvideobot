@@ -6,4 +6,4 @@ sand.py
 .*
 .ycloud_ignore
 .ycloud_conf
-.upload
+.upload.webhook
