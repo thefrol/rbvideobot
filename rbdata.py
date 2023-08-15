@@ -1,5 +1,6 @@
 import requests
 from dataclasses import dataclass
+from datetime import datetime
 import os
 import json
 
@@ -26,4 +27,4 @@ class RbData:
         if resp.status_code!=200:
             return None
 
-        return [Video(**data) for data in resp.json()['videos']]
+        return [Video(id=data['id'], name=data['name']) for data in resp.json()['videos']]
