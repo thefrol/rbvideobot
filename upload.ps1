@@ -125,19 +125,8 @@ foreach($parameter in $settings.GetEnumerator()){
 }
 
 #convert evn variables to string
-$envString=''
-$firstEnv=$true
-foreach ($env in $settings.environment.GetEnumerator()){
-    if($firstEnv){
-        $firstEnv=$false
-        #not added ";"
-    } else{
-        $envString+=";"
-    }
-    $envString+=$env.Name + '=' + $env.Value
-}
-$runString+=" --environment `"$envString`""
-
+$envString=$settings.environment.keys | ForEach-Object {"$_=$($settings.environment[$_])"} | join-string -separator ',' #making env_string
+$runString+=" --environment $envString"
 
 
 #Zipping
