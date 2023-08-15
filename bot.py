@@ -3,6 +3,7 @@ import logging
 import sys
 import time
 import os
+from itertools import starmap
 
 import telebot
 from telebot import types
@@ -15,13 +16,22 @@ API_TOKEN = os.getenv('TOKEN')
 bot = telebot.TeleBot(API_TOKEN)
 telebot.logger.setLevel(logging.DEBUG)
 
-def create_video_article(video:Video):
+def combine_fist_videos(videos:list[Video],count=3):
+    message='\n'.join(f"{video.name} \n {video.url}"  for video in videos[:count])
+    return types.InlineQueryResultArticle(
+        id=id(message),
+        title= 'Три свежайших',
+        description='\n'.join([video.name for video in videos]),
+        input_message_content=types.InputTextMessageContent(message))
+
+
+def create_video_article(id:int,video:Video):
     message=f"{video.name} \n {video.url}"
     return types.InlineQueryResultArticle(
         id=str(video.id),
         title= video.name,
         url=video.url,
-        description='some description \n on many strings',
+        description=video.name,
         input_message_content=types.InputTextMessageContent(message))
 
 
@@ -32,9 +42,10 @@ def query_text(inline_query):
         if videos==None or len(videos)==0:
             bot.answer_inline_query(inline_query.id,results=[]) #maybe block unnecesary
             return
-        responses=list(map(create_video_article,videos))
-        bot.answer_inline_query(inline_query.id, responses)
-    except Exception as e:
+        responses=list(starmap(create_video_article,enumerate(videos)))
+        first_videos=combine_fist_videos(videos,3)
+        bot.answer_inline_query(inline_query.id, [first_videos,*responses])
+    except ValueError as e:
         print(f'inline_handler error {e}')
 
 # @bot.inline_handler(lambda query: len(query.query) == 0)
