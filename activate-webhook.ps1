@@ -5,7 +5,10 @@ param (
     $Environment=$null,
     [Parameter()]
     [switch]
-    $Init
+    $Init,
+    [Parameter()]
+    [switch]
+    $Delete
 )
 
 $configFile='.webhook'
@@ -50,8 +53,12 @@ $config=Get-Content $configFile | ConvertFrom-Yaml
 if(!$Environment){
     $Environment=$config.default
 }
+if(!$Delete){
+    $resp=Invoke-RestMethod "https://api.telegram.org/bot$($config.profiles[$Environment].token)/setWebhook?url=$($config.profiles[$Environment].url)"
+} else{
+    $resp=Invoke-RestMethod "https://api.telegram.org/bot$($config.profiles[$Environment].token)/setWebhook?remove"
+}
 
-$resp=Invoke-RestMethod "https://api.telegram.org/bot$($config.profiles[$Environment].token)/setWebhook?url=$($config.profiles[$Environment].url)"
 
 if(!$?){
     Write-Host "Not done. Some connection issues. Try again later."
