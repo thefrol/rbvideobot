@@ -3,6 +3,7 @@ __pycache__
 .vscode
 *.zip
 sand.py
+.*
 .ycloud_ignore
 .ycloud_conf
 .upload
