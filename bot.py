@@ -21,6 +21,7 @@ def create_video_article(video:Video):
         id=str(video.id),
         title= video.name,
         url=video.url,
+        description='some description \n on many strings',
         input_message_content=types.InputTextMessageContent(message))
 
 
@@ -28,12 +29,13 @@ def create_video_article(video:Video):
 def query_text(inline_query):
     try:
         videos=RbData().get_videos(inline_query.query)
-        if videos==None:
-            bot.answer_inline_query(inline_query.id, [])
+        if videos==None or len(videos)==0:
+            bot.answer_inline_query(inline_query.id,results=[]) #maybe block unnecesary
+            return
         responses=list(map(create_video_article,videos))
         bot.answer_inline_query(inline_query.id, responses)
     except Exception as e:
-        print(e)
+        print(f'inline_handler error {e}')
 
 # @bot.inline_handler(lambda query: len(query.query) == 0)
 # def default_query(inline_query):
