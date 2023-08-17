@@ -7,3 +7,4 @@ sand.py
 .ycloud_ignore
 .ycloud_conf
 .upload.webhook
+*.ps1
