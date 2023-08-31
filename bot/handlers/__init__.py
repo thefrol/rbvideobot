@@ -1,20 +1,9 @@
-# This example show how to write an inline mode telegram bot use pyTelegramBotAPI.
-import logging
-import sys
-import time
-import os
 from itertools import starmap
 
-import telebot
 from telebot import types
 
 from rbdata import RbData,Video
-
-API_TOKEN = os.getenv('TOKEN')
-
-
-bot = telebot.TeleBot(API_TOKEN)
-telebot.logger.setLevel(logging.WARNING)
+from bot.bot import bot
 
 def create_video_article(id:int,video:Video):
     message=f"{video.name} \n {video.url}"
@@ -38,17 +27,3 @@ def query_text(inline_query):
         bot.answer_inline_query(inline_query.id, [*responses])
     except ValueError as e:
         print(f'inline_handler error {e}')
-
-
-def main_loop():
-    bot.infinity_polling(long_polling_timeout=3)
-    while 1:
-        time.sleep(3)
-
-
-if __name__ == '__main__':
-    try:
-        main_loop()
-    except KeyboardInterrupt:
-        print('\nExiting by user request.\n')
-        sys.exit(0)
