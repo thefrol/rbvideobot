@@ -5,6 +5,7 @@ from pprint import pprint
 import os
 from ..bot import bot
 from telebot.types import Message
+import re
 
 
 
@@ -30,6 +31,25 @@ def upload_video(resource:yadisk.Resource, messaging_func) -> rbdata.Video:
 
 def is_yandex_disk_link(message):
     return 'yadi.sk' in message.text or 'disk.yandex.ru' in message.text
+
+def is_link(message):
+    m=re.match(pattern=r"(http|https|ftp)://.*",string=message.text)
+    return m is not None
+
+def not_(func):
+    # inverts a condition func
+    #   usage: not(is_yandex_link)
+    return lambda message: not func(message)
+
+def and_(*funcs): #TODO TESTS!
+    # mixes two and more conditions functions into one
+    #   usege: and_(is_link,not_(is_yandex_link))
+    def callee(message: Message):
+        nonlocal funcs
+        return all((f(message) for f in funcs))
+    return callee
+
+
 
 @bot.message_handler(func=is_yandex_disk_link)
 def on_disk_link(message:Message):
