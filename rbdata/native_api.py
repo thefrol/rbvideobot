@@ -1,6 +1,7 @@
 # Here lies class for working with native GraphQL API
 
 import requests
+from rbdata import Video
 
 
 class NativeRbData:
@@ -43,7 +44,7 @@ class NativeRbData:
             print("cant parse answer from graphql, when trying to get token")
             return None
 
-    def upload_video_from_url(self, video_url, filename="Untitled video from api",organizarion_id=None):
+    def upload_video_from_url(self, video_url, filename="Untitled video from api",organizarion_id=None)-> Video:
         token=self.get_token()
         if token is None:
             raise ValueError("Cant authorize in graphql to get videos")
@@ -81,11 +82,12 @@ class NativeRbData:
         if not resp.ok:
             print("Received bad resonse from graphql")
             return None
-        # print('error handling in qery',resp.json())
-        # try:
-        #     token=resp.json()['data']['session']['createWithPassword']['sessionTokens']['accessToken']
-        #     return token
-        # except Exception:
-        #     print("cant parse answer from graphql, when trying to get token")
-        #     return None
-        return resp.text
+        resp=resp.json()
+        
+        error=resp['data']['video']['createFromUrl']['error']
+        if error is not None:
+            print(f"Error with request on update video: {resp['error']}")
+            return None
+
+        video=resp['data']['video']['createFromUrl']['video']
+        return Video(id=video['id'],name=video['name'])

@@ -13,3 +13,6 @@ def get_download_url(public_link:str):
     download_url = response.json()['href']
     return download_url
 
+def get_name(public_link:str):
+    # Получить имя файла. Большще инфы: https://yandex.ru/dev/disk/api/reference/public.html
+    raise NotImplemented
