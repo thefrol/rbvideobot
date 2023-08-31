@@ -29,6 +29,12 @@ def upload_video_from_yadisk(resource:yadisk.Resource, messaging_func=None) -> r
 
     return n.upload_video_from_url(video_url=resource.file, filename=resource.name)
 
+def upload_random_video(url, messaging_func=None):
+    """Загружает видео по ссылке в Хранилище
+    возвращает rbdata.Video если все удалось, или None если возникла ошибка"""
+    n=NativeRbData(os.getenv("RBDATA_EMAIL"),os.getenv("RBDATA_PASSWORD"))
+    return n.upload_video_from_url(video_url=url, filename=f"Upload from @rbvideobot: {url}") #TODO bot name in os.getenv and after settings.bot_name
+
 def is_yandex_disk_link(message):
     return 'yadi.sk' in message.text or 'disk.yandex.ru' in message.text
 
@@ -66,4 +72,13 @@ def on_disk_link(message:Message):
         return
     bot.send_photo(chat_id=message.chat.id,photo=r.best_preview,caption=f'❤️‍🔥Загружено видео:\n{video.name}\n`{video.url}` ',parse_mode='MARKDOWN')
     
-        
+@bot.message_handler(func=and_(is_link, not_(is_yandex_disk_link)))
+def on_link(message:Message):
+    """Ловит сообщения со ссылками, и пытается загрузить их в Хранилище"""
+    bot.reply_to(message, "🤔 Какая-то ссылка. Попробую её загрузить в видео. ")
+    url=message.text
+    video=upload_random_video(url=url)
+    if video is None:
+        bot.reply_to(message=message,text='Не удалось загрузить файл 😓')
+        return
+    bot.send_message(chat_id=message.chat.id,text=f'❤️‍🔥Загружено видео:\n{video.name}\n`{video.url}` ',parse_mode='MARKDOWN')   

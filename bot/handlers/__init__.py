@@ -6,7 +6,7 @@ from rbdata import RbData,Video
 from bot.bot import bot
 
 # importing other handlers
-from .upload_video import on_disk_link
+from .upload_video import on_disk_link,on_link
 
 # basic handlers
 
