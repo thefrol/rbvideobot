@@ -9,7 +9,7 @@ import re
 
 
 
-def upload_video(resource:yadisk.Resource, messaging_func) -> rbdata.Video:
+def upload_video_from_yadisk(resource:yadisk.Resource, messaging_func=None) -> rbdata.Video:
     """
         url: URL of video to upload
         messaging_func: a function to response to bot"""
@@ -60,7 +60,7 @@ def on_disk_link(message:Message):
         bot.reply_to(message=message,text=text)
     url=message.text
     r=yadisk.Resource(url)
-    video=upload_video(resource=r,messaging_func=responder)
+    video=upload_video_from_yadisk(resource=r,messaging_func=responder)
     if video is None:
         bot.reply_to(message=message,text='Не удалось загрузить файл 😓')
         return
