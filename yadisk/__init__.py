@@ -1,1 +1,1 @@
-from .links import get_download_url
+from .resource import Resource
