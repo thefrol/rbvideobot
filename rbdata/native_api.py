@@ -83,10 +83,10 @@ class NativeRbData:
             print("Received bad resonse from graphql")
             return None
         resp=resp.json()
-        
+
         error=resp['data']['video']['createFromUrl']['error']
         if error is not None:
-            print(f"Error with request on update video: {resp['error']}")
+            print(f"Error with request on update video: {error['message']}")
             return None
 
         video=resp['data']['video']['createFromUrl']['video']
