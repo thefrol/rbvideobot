@@ -7,14 +7,15 @@ from ..bot import bot
 from telebot.types import Message
 import re
 
-
+#Helper Functions
 
 def upload_video_from_yadisk(resource:yadisk.Resource, messaging_func=None) -> rbdata.Video:
-    """
-        url: URL of video to upload
-        messaging_func: a function to response to bot"""
+    """Загружает в Хранилище ресурс яндекс диска
+        resource: yadisk.Resource ресурс яндекс диска
+        messaging_func: функция, которая будет отправлять сообщения которые напишет эта функция
+        
+    В случае ошибки вернет None, в случае успеха rbdata.Video"""
     n=NativeRbData(os.getenv("RBDATA_EMAIL"),os.getenv("RBDATA_PASSWORD"))
-
 
     if not resource.is_file:
         print(f'not a file, its a {resource.type}')
@@ -31,31 +32,41 @@ def upload_video_from_yadisk(resource:yadisk.Resource, messaging_func=None) -> r
 
 def upload_random_video(url, messaging_func=None):
     """Загружает видео по ссылке в Хранилище
+        url: ссылка на видео
+        messaging_func: функция принимающая сообщения от этой функции и, например, отправляющая их в бот
     возвращает rbdata.Video если все удалось, или None если возникла ошибка"""
     n=NativeRbData(os.getenv("RBDATA_EMAIL"),os.getenv("RBDATA_PASSWORD"))
     return n.upload_video_from_url(video_url=url, filename=f"Upload from @rbvideobot: {url}") #TODO bot name in os.getenv and after settings.bot_name
 
+
+# Conditions for handlers
+
 def is_yandex_disk_link(message):
+    """returns True if message has yandex link in its text
+    This is a condition function for handlers"""
     return 'yadi.sk' in message.text or 'disk.yandex.ru' in message.text
 
 def is_link(message):
+    """returns True if message has any url in its text
+    This is a condition function for handlers"""
     m=re.match(pattern=r"(http|https|ftp)://.*",string=message.text)
     return m is not None
 
 def not_(func):
-    # inverts a condition func
-    #   usage: not(is_yandex_link)
+    """inverts a condition func
+    usage: not(is_yandex_link)"""
     return lambda message: not func(message)
 
 def and_(*funcs): #TODO TESTS!
-    # mixes two and more conditions functions into one
-    #   usege: and_(is_link,not_(is_yandex_link))
+    """mixes two and more conditions functions into one
+    usage: and_(is_link,not_(is_yandex_link))"""
     def callee(message: Message):
         nonlocal funcs
         return all((f(message) for f in funcs))
     return callee
 
 
+# Handlers
 
 @bot.message_handler(func=is_yandex_disk_link)
 def on_disk_link(message:Message):
