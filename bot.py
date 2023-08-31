@@ -14,7 +14,7 @@ API_TOKEN = os.getenv('TOKEN')
 
 
 bot = telebot.TeleBot(API_TOKEN)
-telebot.logger.setLevel(logging.DEBUG)
+telebot.logger.setLevel(logging.WARNING)
 
 def create_video_article(id:int,video:Video):
     message=f"{video.name} \n {video.url}"
