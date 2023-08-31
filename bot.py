@@ -31,6 +31,7 @@ def query_text(inline_query):
     try:
         videos=RbData().get_videos(inline_query.query)
         if videos==None or len(videos)==0:
+            print("INLINE HANDLER: received no videos")
             bot.answer_inline_query(inline_query.id,results=[]) #maybe block unnecesary
             return
         responses=list(starmap(create_video_article,enumerate(videos)))
