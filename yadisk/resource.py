@@ -1,3 +1,4 @@
+from functools import cached_property
 import requests
 
 class Resource:
@@ -36,6 +37,15 @@ class Resource:
     @property
     def is_file(self):
         return self.type=='file'
+    
+    @cached_property
+    def previews(self):
+        return {item['name']:item['url'] for item in self.raw_data['sizes'] }
+    
+    @cached_property
+    def best_preview(self):
+        p=self.previews
+        return p.get("XXL") or p.get("XL") or p.get("L") or p.get("M") or p.get("S") or self.preview
     
 
     

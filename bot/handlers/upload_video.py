@@ -44,6 +44,6 @@ def on_disk_link(message:Message):
     if video is None:
         bot.reply_to(message=message,text='Не удалось загрузить файл 😓')
         return
-    bot.send_photo(chat_id=message.chat.id,photo=r.preview,caption=f'❤️‍🔥Загружено видео:\n{video.name}\n`{video.url}` ',parse_mode='MARKDOWN')
+    bot.send_photo(chat_id=message.chat.id,photo=r.best_preview,caption=f'❤️‍🔥Загружено видео:\n{video.name}\n`{video.url}` ',parse_mode='MARKDOWN')
     
         
