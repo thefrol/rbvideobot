@@ -3,6 +3,8 @@ from dataclasses import dataclass
 from datetime import datetime
 import os
 import json
+from urllib.parse import urljoin
+
 
 @dataclass
 class Video:
@@ -16,6 +18,7 @@ class Video:
 
 class RbData:
     def __init__(self, api_url='env'):
+        # api url: url without controller and with slash, ex. https://d5d8gtcht8slkjad0ss3.apigw.yandexcloud.net/api/v1/
         if api_url == 'env':
             api_url=os.getenv('RBDATA_API')
 
@@ -23,8 +26,10 @@ class RbData:
             raise AttributeError('Rbdata api not specified. Put in constructor or Env variable "RBDATA_API"')
         self.api_url=api_url
     def get_videos(self,name) -> list[Video]:
-        resp=requests.get(self.api_url,params={'videoName':name})
+        url=urljoin(self.api_url, 'videos')
+        resp=requests.post(url,json={'videoName':name,"count":30})
         if resp.status_code!=200:
+            print("GETTING VIDEOS: resp status not 200")
             return None
 
         return [Video(id=data['id'], name=data['name']) for data in resp.json()['videos']]
