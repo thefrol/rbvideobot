@@ -12,7 +12,22 @@ class NativeRbData:
         self.__email=email
         self.__password=password
 
+    def _graphql_request(self, query:str, authorize=False)->dict| None:
+        headers=None
+        if authorize:
+            token=self.get_token()
+            if token is None:
+                raise ValueError("Cant authorize in graphql to get videos")
+            headers={"Authorization":f"Bearer {token}"}
 
+        request_body={"query":query}
+
+        resp=requests.post(self.api_url,json=request_body, headers=headers)
+        if not resp.ok:
+            print("Received bad resonse from graphql")
+            return None
+        return  resp.json()
+    
     def get_token(self)->str:
         graphql_query="""
             mutation {{
@@ -91,3 +106,4 @@ class NativeRbData:
 
         video=resp['data']['video']['createFromUrl']['video']
         return Video(id=video['id'],name=video['name'])
+
