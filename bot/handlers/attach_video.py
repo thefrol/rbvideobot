@@ -6,7 +6,8 @@ import re
 
 from ..bot import bot
 import settings
-from .conditionals import is_a_reply, is_numeric, reply_to_message, from_bot,has_link_to_storage, and_
+from .conditionals import is_a_reply, is_numeric, replies_to, from_bot,has_link_to_storage, and_
+
 
 # Handlers
 
