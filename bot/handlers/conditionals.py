@@ -32,6 +32,9 @@ def has_link_to_storage(message:Message):
     pattern=settings.STORAGE_URL_REGEXP
     return re.search(pattern=pattern, string=message.text) is not None
 
+def is_numeric(message:Message):
+    return message.text is not None and message.text.isnumeric()
+
 # Aggregators
 
 def not_(func):
@@ -48,9 +51,11 @@ def and_(*funcs): #TODO TESTS!
     return callee
 
 def reply_to_message(func):
-    # a redirect of conditional, conditinal in bracers will take
-    # a reply mesage instead of a direct message
-    # will return False if has no reply message
+    """a redirect of conditional,
+    conditinal in bracers will take
+    a reply message instead of a direct message,
+    and apply `func` to it: func(message.reply_to_message)
+    will return False if has no reply message"""
     def callee(message:Message):
         if message.reply_to_message is None:
             return False
