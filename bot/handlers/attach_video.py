@@ -26,7 +26,7 @@ def extract_video_id(text, messaging_callback):
 
 # Handlers
 
-@bot.message_handler(func=replies_to(from_bot,has_link_to_storage, is_numeric))
+@bot.message_handler(func=and_(is_numeric,replies_to(from_bot,has_link_to_storage)))
 def on_numeric_reply_to_links(message:Message):
     """Привязывает видео к матчу, если ссылка на матч только одна и получино сообщение из цифр, оно отправлено в ответ на сообщение со ссылкой на видео"""
     message_with_video=message.reply_to_message
