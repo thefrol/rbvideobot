@@ -107,3 +107,35 @@ class NativeRbData:
         video=resp['data']['video']['createFromUrl']['video']
         return Video(id=video['id'],name=video['name'])
 
+    def attach_match(self, match_id, video_id):
+        graphql_query='''
+            mutation{{
+                video{{
+                    updateMatch(input:{{
+                        videoId: {video_id}
+                        matchId: {match_id}
+                    }})
+                    {{
+                        video{{
+                            id
+                            name        
+                        }}
+                                    
+                        error {{
+                            code
+                            message
+                    }}
+                    }}
+                }}
+            }}
+        '''.format(match_id=match_id, video_id=video_id)
+
+        resp=self._graphql_request(query=graphql_query,authorize=True)
+
+        error=resp['data']['video']['updateMatch']['error']
+        if error is not None:
+            print(f"Error with request on attach_match: {error['message']}")
+            return False
+
+        return True
+
