@@ -1,5 +1,6 @@
 from rbdata.native_api import NativeRbData
 import rbdata
+import settings
 import yadisk
 from pprint import pprint
 import os
@@ -38,7 +39,7 @@ def upload_random_video(url, messaging_func=None):
         messaging_func: функция принимающая сообщения от этой функции и, например, отправляющая их в бот
     возвращает rbdata.Video если все удалось, или None если возникла ошибка"""
     n=NativeRbData(os.getenv("RBDATA_EMAIL"),os.getenv("RBDATA_PASSWORD"))
-    return n.upload_video_from_url(video_url=url, filename=f"Upload from @rbvideobot: {url}") #TODO bot name in os.getenv and after settings.bot_name
+    return n.upload_video_from_url(video_url=url, filename=f"Upload from @{settings.BOT_USERNAME}: {url}") #TODO bot name in os.getenv and after settings.bot_name
 
 # Handlers
 

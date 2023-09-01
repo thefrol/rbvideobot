@@ -7,6 +7,8 @@ and_(is_reply, is_link) - значит и ссылка, и ответ на со�
 import re
 
 from telebot.types import Message
+
+import settings
 from ..bot import bot
 
 def is_yandex_disk_link(message:Message):
@@ -24,7 +26,7 @@ def is_a_reply(message:Message):
     return message.reply_to_message is not None
 
 def from_bot(message:Message):
-    return message.from_user.username == bot.get_me().username
+    return message.from_user.username == settings.BOT_USERNAME
 
 def has_link_to_storage(message:Message):
     pattern=r'https://video.rbdata.ru/video/(?P<rbdata_video_id>\d+)'
