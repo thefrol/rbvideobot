@@ -56,7 +56,7 @@ def on_disk_link(message:Message):
     if video is None:
         bot.reply_to(message=message,text='Не удалось загрузить файл 😓')
         return
-    bot.send_photo(chat_id=message.chat.id,photo=r.best_preview,caption=f'❤️‍🔥Загружено видео:\n{video.name}\n`{video.url}` ',parse_mode='MARKDOWN')
+    bot.send_photo(chat_id=message.chat.id,photo=r.best_preview,caption=f'❤️‍🔥Загружено видео:`{video.url}` ',parse_mode='MARKDOWN')
     
 @bot.message_handler(func=and_(is_link, not_(is_yandex_disk_link)))
 def on_link(message:Message):
@@ -67,4 +67,4 @@ def on_link(message:Message):
     if video is None:
         bot.reply_to(message=message,text='Не удалось загрузить файл 😓')
         return
-    bot.send_message(chat_id=message.chat.id,text=f'❤️‍🔥Загружено видео:\n{video.name}\n`{video.url}` ',parse_mode='MARKDOWN')   
+    bot.send_message(chat_id=message.chat.id,text=f'❤️‍🔥Загружено видео: `{video.url}` ',parse_mode='MARKDOWN')   
