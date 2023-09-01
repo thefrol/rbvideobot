@@ -29,7 +29,7 @@ def from_bot(message:Message):
     return message.from_user.username == settings.BOT_USERNAME
 
 def has_link_to_storage(message:Message):
-    pattern=r'https://video.rbdata.ru/video/(?P<rbdata_video_id>\d+)'
+    pattern=settings.STORAGE_URL_REGEXP
     return re.search(pattern=pattern, string=message.text) is not None
 
 # Aggregators
