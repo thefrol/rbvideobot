@@ -11,7 +11,7 @@ from bot.bot import bot
 #PLACE YOUR HANDLERS HERE
 
 from .upload_video import on_disk_link,on_link
-from .attach_video import append_match_id
+from .update_video import on_numeric_reply_to_links,on_parametric_message_in_reply_to_link
 
 # basic handlers
 
