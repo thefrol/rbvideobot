@@ -41,6 +41,15 @@ def upload_random_video(url, messaging_func=None):
     n=NativeRbData(os.getenv("RBDATA_EMAIL"),os.getenv("RBDATA_PASSWORD"))
     return n.upload_video_from_url(video_url=url, filename=f"Upload from @{settings.BOT_USERNAME}: {url}") #TODO bot name in os.getenv and after settings.bot_name
 
+def make_safe_for_markdown(text:str)->str:
+    symbols='_*[]()~">#+-=|{{}}.!'
+    result=""
+    for char in text:
+        if char in symbols:
+            result+='\\'
+        result+=char
+    return result
+
 # Handlers
 
 @bot.message_handler(func=is_yandex_disk_link)
