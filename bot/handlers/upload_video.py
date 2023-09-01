@@ -3,9 +3,11 @@ import rbdata
 import yadisk
 from pprint import pprint
 import os
-from ..bot import bot
 from telebot.types import Message
 import re
+
+from ..bot import bot
+from .conditionals import and_, not_, is_link, is_yandex_disk_link
 
 #Helper Functions
 
@@ -37,34 +39,6 @@ def upload_random_video(url, messaging_func=None):
     возвращает rbdata.Video если все удалось, или None если возникла ошибка"""
     n=NativeRbData(os.getenv("RBDATA_EMAIL"),os.getenv("RBDATA_PASSWORD"))
     return n.upload_video_from_url(video_url=url, filename=f"Upload from @rbvideobot: {url}") #TODO bot name in os.getenv and after settings.bot_name
-
-
-# Conditions for handlers
-
-def is_yandex_disk_link(message):
-    """returns True if message has yandex link in its text
-    This is a condition function for handlers"""
-    return 'yadi.sk' in message.text or 'disk.yandex.ru' in message.text
-
-def is_link(message):
-    """returns True if message has any url in its text
-    This is a condition function for handlers"""
-    m=re.match(pattern=r"(http|https|ftp)://.*",string=message.text)
-    return m is not None
-
-def not_(func):
-    """inverts a condition func
-    usage: not(is_yandex_link)"""
-    return lambda message: not func(message)
-
-def and_(*funcs): #TODO TESTS!
-    """mixes two and more conditions functions into one
-    usage: and_(is_link,not_(is_yandex_link))"""
-    def callee(message: Message):
-        nonlocal funcs
-        return all((f(message) for f in funcs))
-    return callee
-
 
 # Handlers
 
