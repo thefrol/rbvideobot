@@ -1,3 +1,5 @@
+"""All Handlers must be imported in this module"""
+
 from itertools import starmap
 
 from telebot import types
@@ -6,6 +8,8 @@ from rbdata import RbData,Video
 from bot.bot import bot
 
 # importing other handlers
+#PLACE YOUR HANDLERS HERE
+
 from .upload_video import on_disk_link,on_link
 
 # basic handlers
