@@ -52,6 +52,8 @@ def make_safe_for_markdown(text:str)->str:
 
 # Handlers
 
+disclamer='\n\n Чтобы привязать матч, ответь на это сообщение так `id_матча` или `match_id=1071` \n Чтобы поменять название, напиши его в ответ на это сообщение или `name=название матча`'
+
 @bot.message_handler(func=is_yandex_disk_link)
 def on_disk_link(message:Message):
     bot.reply_to(message, "🤔Кажется, что-то с Яндекс.Диска. Попробую загрузить в видео. ")
@@ -65,7 +67,7 @@ def on_disk_link(message:Message):
     if video is None:
         bot.reply_to(message=message,text='Не удалось загрузить файл 😓')
         return
-    bot.send_photo(chat_id=message.chat.id,photo=r.best_preview,caption=f'❤️‍🔥Загружено видео:`{video.url}` ',parse_mode='MARKDOWN')
+    bot.send_photo(chat_id=message.chat.id,photo=r.best_preview,caption=f'❤️‍🔥Загружено видео:`{video.url}` '+disclamer,parse_mode='MARKDOWN')
     
 @bot.message_handler(func=and_(is_link, not_(is_yandex_disk_link)))
 def on_link(message:Message):
@@ -76,4 +78,4 @@ def on_link(message:Message):
     if video is None:
         bot.reply_to(message=message,text='Не удалось загрузить файл 😓')
         return
-    bot.send_message(chat_id=message.chat.id,text=f'❤️‍🔥Загружено видео: `{video.url}` ',parse_mode='MARKDOWN')   
+    bot.send_message(chat_id=message.chat.id,text=f'❤️‍🔥Загружено видео: `{video.url}` '+disclamer,parse_mode='MARKDOWN')   
