@@ -50,7 +50,7 @@ def and_(*funcs): #TODO TESTS!
         return all((f(message) for f in funcs))
     return callee
 
-def reply_to_message(func):
+def replies_to(*funcs):
     """a redirect of conditional,
     conditinal in bracers will take
     a reply message instead of a direct message,
@@ -59,5 +59,5 @@ def reply_to_message(func):
     def callee(message:Message):
         if message.reply_to_message is None:
             return False
-        return func(message.reply_to_message)
+        return and_(*funcs)(message.reply_to_message)
     return callee
