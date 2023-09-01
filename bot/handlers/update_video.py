@@ -73,7 +73,7 @@ def on_numeric_reply_to_links(message:Message):
 # связь параметров и функций, которые они вызывают
 func_map={
     ("matchId","match","matchid","match_id"): lambda video_id, value, messaging_callback: append_match_id(video_id=video_id, match_id=value,messaging_callback=messaging_callback),
-    ("name","videoName","video_name"): lambda video_id, value, messaging_callback: messaging_callback("Not Implemented")
+    ("name","videoName","video_name"): lambda video_id, value, messaging_callback: messaging_callback("Not Implemented 🤣 Автору убежэал снимать тренировку")
 }
 
 @bot.message_handler(
